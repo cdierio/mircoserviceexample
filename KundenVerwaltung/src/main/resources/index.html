@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+        <style type="text/css">
+            table.table-style-two {
+                font-family: verdana, arial, sans-serif;
+                font-size: 11px;
+                color: #333333;
+                border-width: 1px;
+                border-color: #3A3A3A;
+                border-collapse: collapse;
+            }
+
+            table.table-style-two th {
+                border-width: 1px;
+                padding: 8px;
+                width: 200px;
+                border-style: solid;
+                border-color: #517994;
+                background-color: #B2CFD8;
+            }
+
+            table.table-style-two tr:hover td {
+                background-color: #DFEBF1;
+            }
+
+            table.table-style-two td {
+                border-width: 1px;
+                padding: 250px;
+                border-style: solid;
+                border-color: #517994;
+                background-color: #ffffff;
+            }
+
+            .smallth {
+                padding: 8px !important;
+                width: 10px !important;
+            }
+
+            .btn.btn_green span.icon {
+                background-image: url(add1_64.png);
+                float: left;
+                background-size: 25px 25px;
+                width: 25px;
+                height: 25px;
+            }
+
+            .btn.btn_red span.icon {
+                background-image: url(delete_64.png);
+                float: left;
+                background-size: 25px 25px;
+                width: 25px;
+                height: 25px;
+            }
+
+            .withouttop{
+                border-top-width: 0px !important;
+            }
+
+        </style>
+        <script>
+
+            $(document).ready(function () {
+                $.get("http://localhost:8080/KundenVerwaltung-0.0.1-SNAPSHOT/rest/customers", function (data) {
+
+                    for (var i = 0; i < data.customers.length; i++) {
+                        $('#datatable > tbody:last-child').append('<tr>  <th style="display: none;">' + data.customers[i].ID + '</th> \n\
+                        <th>' + data.customers[i].companyName + '\
+                        </th><th>' + data.customers[i].name + '</th><th>' + data.customers[i].adress + '</th>\n\
+                        <th class="smallth"><div class="btn btn_red"><span class="icon"></span><a href="#"></a><span></span></div></th></tr>');
+
+                    }
+
+                    $('.btn.btn_red').click(function () {
+
+                        var a = $('th:first', $(this).parents('tr')).text();
+                        $.ajax({
+                            url: 'http://localhost:8080/KundenVerwaltung-0.0.1-SNAPSHOT/rest/customer/' + a,
+                            type: 'DELETE',
+                            success: function (result) {
+                                window.location.reload();
+                            }
+                        });
+
+                    });
+
+                });
+
+
+                $('.btn.btn_green').click(function () {
+
+                    var jsonobject = {};
+
+                    jsonobject.name = $('#fn').val();
+                    jsonobject.companyName = $('#ap').val();
+                    jsonobject.adress = $('#ad').val();
+
+                    $.ajax({
+                        url: 'http://localhost:8080/KundenVerwaltung-0.0.1-SNAPSHOT/rest/customer',
+                        type: 'POST',
+                        contentType: 'application/json ; charset=utf-8',
+                        data: JSON.stringify(jsonobject),
+                        success: function (result) {
+                            window.location.reload();
+                        }
+                    });
+                });
+            });
+
+
+        </script>
+    </head> 
+    <body>
+        <div id="result">
+            <table class="table-style-two" id="datatable">
+                <thead>
+                    <tr>
+                        <th>Ansprechpartner</th>
+                        <th>Firmen Name</th>
+                        <th>Adresse</th>
+                        <th class="smallth"></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>   
+            </table>
+        </div>
+
+        <div id="add">
+
+            <table class="table-style-two" id="addTable">
+                <tbody >
+                    <tr>
+                        <th class="withouttop"><input type="text" name="fname" id="ap"></th>
+                        <th class="withouttop"><input type="text" name="fname" id="fn"></th>
+                        <th class="withouttop"><input type="text" name="fname" id="ad"></th> 
+                        <th class="smallth withouttop"><div class="btn btn_green"><span class="icon"></span><a href="#"></a><span></span></div></th>
+                </tr>
+                </tbody>   
+            </table>
+
+
+
+        </div>
+
+
+    </body>
+</html>
