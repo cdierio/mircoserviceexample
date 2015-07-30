@@ -89,9 +89,7 @@ public class KundenVerwaltungsService{
     @GET
     @Path("{path:.*}")
     public InputStream getStaticFile(@PathParam("path") String path) throws FileNotFoundException {
-        
-        System.out.println(path);
-        
+                
         File someFile = new File(getClass().getResource("/"+path).getPath());
         
         return new FileInputStream(someFile);
